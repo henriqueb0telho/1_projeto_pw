@@ -11,13 +11,14 @@ class Accommodation extends Model
 
     protected $fillable = [
         'name',
+        'description',
         'address',
         'max_guests',
         'bedrooms',
         'bathrooms',
         'cleaning_time_estimate',
-        'is_active',
-        'company_id'
+        'company_id',
+        'is_active'
     ];
 
     protected $casts = [
@@ -25,6 +26,7 @@ class Accommodation extends Model
         'cleaning_time_estimate' => 'decimal:2'
     ];
 
+    // Pertence a uma Empresa
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id');

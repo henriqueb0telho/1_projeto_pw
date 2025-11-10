@@ -1,0 +1,7 @@
+adicionar a interacao dos cleanners "pedirem para reagendar as limpezas", ou entao eles aceitarem as limpezas ou não
+
+se o cleanner tivesse uma morada, a afetacao podia ser feita baseada numa morada. (nice to have) o gestor consegue ver os cleaner mais perto para fazer a limpeza, automaticamente proponha
+
+doc ter o requisitos funcionais por tipos de user e numerar.
+
+o pdf com objetivo, os rf e rnf, o modelo de dominio (da base de dados)

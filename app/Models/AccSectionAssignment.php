@@ -12,8 +12,8 @@ class AccSectionAssignment extends Model
     protected $table = 'acc_section_assignments';
 
     protected $fillable = [
-        'acc_id',
-        'sec_id'
+        'accommodation_id',
+        'accommodation_section_id'
     ];
 
     // Pertence a um alojamento
@@ -25,6 +25,6 @@ class AccSectionAssignment extends Model
     // Pertence a uma secção
     public function section()
     {
-        return $this->belongsTo(AccommodationSection::class, 'sec_id');
+        return $this->belongsTo(AccommodationSection::class, 'accommodation_section_id');
     }
 }

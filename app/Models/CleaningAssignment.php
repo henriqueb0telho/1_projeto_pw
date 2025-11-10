@@ -14,7 +14,9 @@ class CleaningAssignment extends Model
     protected $fillable = [
         'cleaning_schedule_id',
         'user_id',
-        'role_in_cleaning'
+        'role_in_cleaning',
+        'response_status',
+        'responded_at'
     ];
 
     // Pertence a um agendamento de limpeza
