@@ -136,5 +136,50 @@
                 rescheduleDateInput.min = today;
             }
         });
+
+
+        // resources/js/theme-toggle.js ou <script> no head do app.blade.php
+
+        (function() {
+            // 1. Verificar preferência ao carregar a página
+            function setInitialTheme() {
+                const storedTheme = localStorage.getItem('color-theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+
+            // 2. Função para alternar o tema
+            function toggleTheme() {
+                const html = document.documentElement;
+                const isDark = html.classList.contains('dark');
+                const newTheme = isDark ? 'light' : 'dark';
+
+                // Alterna a classe
+                html.classList.toggle('dark', !isDark);
+                // Guarda a preferência
+                localStorage.setItem('color-theme', newTheme);
+
+                // Atualiza o atributo 'aria-checked' no botão (se existir)
+                const themeToggle = document.getElementById('theme-toggle');
+                if (themeToggle) {
+                    themeToggle.setAttribute('aria-checked', !isDark);
+                }
+            }
+
+            // Executar na carga inicial
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', setInitialTheme);
+            } else {
+                setInitialTheme();
+            }
+
+            // Expor a função ao objeto global (window) para ser usada no clique do botão
+            window.toggleTheme = toggleTheme;
+        })();
     </script>
 </html>
