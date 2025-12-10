@@ -2,21 +2,31 @@
 
 namespace App\Models;
 
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Testing\Fluent\Concerns\Has;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use HasProfilePhoto;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'first_name',
         'last_name',
         'email',
-        'email_verified_at',
         'password',
         'phone',
         'address',
@@ -24,81 +34,117 @@ class User extends Authenticatable
         'long',
         'role',
         'company_id',
-        'status'
+        'status',
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'profile_photo_url',
+        'full_name',
     ];
 
-    // Accessor para nome completo
-    public function getFullNameAttribute()
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
     }
 
-    // Scope para utilizadores ativos
-    public function scopeActive($query)
+    /**
+     * Check if user is an admin.
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
     {
-        return $query->where('status', 'active');
+        return $this->role === 'admin';
     }
 
-    // Scope por role
-    public function scopeByRole($query, $role)
+    /**
+     * Check if user is a manager.
+     *
+     * @return bool
+     */
+    public function isManager(): bool
     {
-        return $query->where('role', $role);
+        return $this->role === 'manager';
     }
 
-    // Um utilizador pertence a uma empresa
+    /**
+     * Check if user is a cleaner.
+     *
+     * @return bool
+     */
+    public function isCleaner(): bool
+    {
+        return $this->role === 'cleaner';
+    }
+
+    /**
+     * Check if user has admin or manager role.
+     *
+     * @return bool
+     */
+    public function isAdminOrManager(): bool
+    {
+        return in_array($this->role, ['admin', 'manager']);
+    }
+
+    /**
+     * Check if user is active.
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    /**
+     * Relationship: User belongs to a Company
+     */
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
-    // Um utilizador pode estar em várias secções
-    public function accommodationSections()
+    /**
+     * Relationship: Cleanings assigned to this user (if cleaner)
+     */
+    public function assignedCleanings()
     {
-        return $this->belongsToMany(AccommodationSection::class, 'user_section_assignments');
-    }
-
-    // Um utilizador pode ter várias limpezas atribuídas
-    public function cleaningSchedules()
-    {
-        return $this->belongsToMany(CleaningSchedule::class, 'cleaning_assignments');
-    }
-
-    // Limpezas onde o utilizador é o responsável principal
-    public function primaryCleanings()
-    {
-        return $this->cleaningSchedules()->wherePivot('role_in_cleaning', 'primary');
-    }
-
-    // Verificar se o utilizador é admin
-    public function isAdmin()
-    {
-        return $this->role === 'admin';
-    }
-
-    // Verificar se o utilizador é gestor
-    public function isManager()
-    {
-        return $this->role === 'manager';
-    }
-
-    // Verificar se o utilizador é funcionário de limpeza
-    public function isCleaner()
-    {
-        return $this->role === 'cleaner';
-    }
-
-    // Verificar se o utilizador está ativo
-    public function isActive()
-    {
-        return $this->status === 'active';
+        return $this->hasMany(CleaningSchedule::class, 'assigned_to');
     }
 }
