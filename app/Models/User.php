@@ -147,26 +147,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(CleaningSchedule::class, 'assigned_to');
     }
-
-    public function cleaningAssignments()
-    {
-        return $this->hasMany(CleaningAssignment::class);
-    }
-
-    public function assignedCleaningSchedules()
-    {
-        return $this->belongsToMany(CleaningSchedule::class, 'cleaning_assignments')
-            ->withPivot('role_in_cleaning', 'response_status', 'responded_at')
-            ->withTimestamps();
-    }
-
-    public function pendingCleaningAssignments()
-    {
-        return $this->cleaningAssignments()->where('response_status', 'pending');
-    }
-
-    public function acceptedCleaningAssignments()
-    {
-        return $this->cleaningAssignments()->where('response_status', 'accepted');
-    }
 }

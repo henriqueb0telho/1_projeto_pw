@@ -11,7 +11,7 @@
                 {{ $value }}
             </div>
         @endsession
-        <h1 class="text-2xl font-bold sm:truncate sm:text-3xl sm:tracking-tight py-4 text-center">Welcome to <span class="font-bold italic">SGAL</span></h1>
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
