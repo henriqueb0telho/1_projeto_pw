@@ -20,6 +20,7 @@ class CleaningSchedule extends Model
 
     protected $casts = [
         'scheduled_date' => 'date',
+        'scheduled_time' => 'datetime:H:i',
     ];
 
     public function accommodation()

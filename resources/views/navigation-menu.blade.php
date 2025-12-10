@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-[#1f2421] dark:bg-[#1f2421] border-b border-[#216869]/20">
+<nav x-data="{ open: false }" class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -6,26 +6,44 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-mark class="block h-9 w-auto" />
+                        <x-application-mark class="block h-9 w-auto text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-4 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="text-[#dce1de] hover:text-[#9cc5a1] border-[#49a078]">
+                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="text-gray-700 dark:text-gray-300 hover:text-mint dark:hover:text-mint border-mint">
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <!-- Dark Mode Toggle Button -->
+                <button
+                    id="theme-toggle"
+                    onclick="toggleTheme()"
+                    type="button"
+                    class="p-2 me-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-mint transition-colors duration-200"
+                    aria-label="Alternar tema claro/escuro"
+                >
+                    <!-- Sun icon (Light mode - visible in dark mode) -->
+                    <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                    </svg>
+                    <!-- Moon icon (Dark mode - visible in light mode) -->
+                    <svg id="theme-toggle-dark-icon" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                    </svg>
+                </button>
+
                 <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                     <div class="ms-3 relative">
                         <x-dropdown align="right" width="60">
                             <x-slot name="trigger">
                                 <span class="inline-flex rounded-md">
-                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-[#dce1de] bg-[#216869] hover:bg-[#358471] focus:outline-none focus:bg-[#358471] active:bg-[#358471] transition ease-in-out duration-150">
+                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-mint hover:bg-lagoon focus:outline-none focus:bg-lagoon active:bg-lagoon transition ease-in-out duration-150">
                                         {{ Auth::user()->currentTeam->name }}
 
                                         <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -36,28 +54,28 @@
                             </x-slot>
 
                             <x-slot name="content">
-                                <div class="w-60 bg-[#1f2421] border border-[#216869]/30">
+                                <div class="w-60 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                                     <!-- Team Management -->
-                                    <div class="block px-4 py-2 text-xs text-[#9cc5a1]">
+                                    <div class="block px-4 py-2 text-xs text-gray-500 dark:text-gray-400">
                                         {{ __('Manage Team') }}
                                     </div>
 
                                     <!-- Team Settings -->
-                                    <x-dropdown-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}" class="text-[#dce1de] hover:bg-[#216869]">
+                                    <x-dropdown-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                                         {{ __('Team Settings') }}
                                     </x-dropdown-link>
 
                                     @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                                        <x-dropdown-link href="{{ route('teams.create') }}" class="text-[#dce1de] hover:bg-[#216869]">
+                                        <x-dropdown-link href="{{ route('teams.create') }}" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                                             {{ __('Create New Team') }}
                                         </x-dropdown-link>
                                     @endcan
 
                                     <!-- Team Switcher -->
                                     @if (Auth::user()->allTeams()->count() > 1)
-                                        <div class="border-t border-[#216869]/30"></div>
+                                        <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
-                                        <div class="block px-4 py-2 text-xs text-[#9cc5a1]">
+                                        <div class="block px-4 py-2 text-xs text-gray-500 dark:text-gray-400">
                                             {{ __('Switch Teams') }}
                                         </div>
 
@@ -76,12 +94,12 @@
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                                <button class="flex text-sm border-2 border-[#49a078] rounded-full focus:outline-none focus:border-[#9cc5a1] transition">
+                                <button class="flex text-sm border-2 border-mint rounded-full focus:outline-none focus:border-sage transition">
                                     <img class="size-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" />
                                 </button>
                             @else
                                 <span class="inline-flex rounded-md">
-                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-[#dce1de] bg-[#216869] hover:bg-[#358471] focus:outline-none focus:bg-[#358471] active:bg-[#358471] transition ease-in-out duration-150">
+                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-mint hover:bg-lagoon focus:outline-none focus:bg-lagoon active:bg-lagoon transition ease-in-out duration-150">
                                         {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
 
                                         <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -93,30 +111,30 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <div class="bg-[#1f2421] border border-[#216869]/30">
+                            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                                 <!-- Account Management -->
-                                <div class="block px-4 py-2 text-xs text-[#9cc5a1]">
+                                <div class="block px-4 py-2 text-xs text-gray-500 dark:text-gray-400">
                                     {{ __('Manage Account') }}
                                 </div>
 
-                                <x-dropdown-link href="{{ route('profile.show') }}" class="text-[#dce1de] hover:bg-[#216869]">
+                                <x-dropdown-link href="{{ route('profile.show') }}" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                                     {{ __('Profile') }}
                                 </x-dropdown-link>
 
                                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                    <x-dropdown-link href="{{ route('api-tokens.index') }}" class="text-[#dce1de] hover:bg-[#216869]">
+                                    <x-dropdown-link href="{{ route('api-tokens.index') }}" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                                         {{ __('API Tokens') }}
                                     </x-dropdown-link>
                                 @endif
 
-                                <div class="border-t border-[#216869]/30"></div>
+                                <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
                                 <!-- Authentication -->
                                 <form method="POST" action="{{ route('logout') }}" x-data>
                                     @csrf
 
                                     <x-dropdown-link href="{{ route('logout') }}"
-                                                     @click.prevent="$root.submit();" class="text-[#dce1de] hover:bg-[#8c4f4f]">
+                                                     @click.prevent="$root.submit();" class="text-gray-700 dark:text-gray-300 hover:bg-rust hover:text-white dark:hover:bg-rust dark:hover:text-white">
                                         {{ __('Log Out') }}
                                     </x-dropdown-link>
                                 </form>
@@ -128,7 +146,7 @@
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-[#9cc5a1] hover:text-[#dce1de] hover:bg-[#216869] focus:outline-none focus:bg-[#216869] focus:text-[#dce1de] transition duration-150 ease-in-out">
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
                     <svg class="size-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -139,36 +157,50 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1 bg-[#1f2421]">
-            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="text-[#dce1de] hover:bg-[#216869]">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white dark:bg-gray-800">
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-[#216869]/30 bg-[#1f2421]">
+        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-700">
             <div class="flex items-center px-4">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                     <div class="shrink-0 me-3">
-                        <img class="size-10 rounded-full object-cover border-2 border-[#49a078]" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" />
+                        <img class="size-10 rounded-full object-cover border-2 border-mint" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" />
                     </div>
                 @endif
 
                 <div>
-                    <div class="font-medium text-base text-[#dce1de]">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
-                    <div class="font-medium text-sm text-[#9cc5a1]">{{ Auth::user()->email }}</div>
+                    <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
+                    <div class="font-medium text-sm text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</div>
                 </div>
             </div>
 
             <div class="mt-3 space-y-1">
+                <!-- Dark Mode Toggle Mobile -->
+                <button
+                    onclick="toggleTheme()"
+                    type="button"
+                    class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-200"
+                >
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-3 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                        Alternar Tema
+                    </div>
+                </button>
+
                 <!-- Account Management -->
-                <x-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')" class="text-[#dce1de] hover:bg-[#216869]">
+                <x-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 
                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                    <x-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')" class="text-[#dce1de] hover:bg-[#216869]">
+                    <x-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                         {{ __('API Tokens') }}
                     </x-responsive-nav-link>
                 @endif
@@ -178,35 +210,35 @@
                     @csrf
 
                     <x-responsive-nav-link href="{{ route('logout') }}"
-                                           @click.prevent="$root.submit();" class="text-[#dce1de] hover:bg-[#8c4f4f]">
+                                           @click.prevent="$root.submit();" class="text-gray-700 dark:text-gray-300 hover:bg-rust hover:text-white dark:hover:bg-rust dark:hover:text-white">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
 
                 <!-- Team Management -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
-                    <div class="border-t border-[#216869]/30"></div>
+                    <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
-                    <div class="block px-4 py-2 text-xs text-[#9cc5a1]">
+                    <div class="block px-4 py-2 text-xs text-gray-500 dark:text-gray-400">
                         {{ __('Manage Team') }}
                     </div>
 
                     <!-- Team Settings -->
-                    <x-responsive-nav-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}" :active="request()->routeIs('teams.show')" class="text-[#dce1de] hover:bg-[#216869]">
+                    <x-responsive-nav-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}" :active="request()->routeIs('teams.show')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                         {{ __('Team Settings') }}
                     </x-responsive-nav-link>
 
                     @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                        <x-responsive-nav-link href="{{ route('teams.create') }}" :active="request()->routeIs('teams.create')" class="text-[#dce1de] hover:bg-[#216869]">
+                        <x-responsive-nav-link href="{{ route('teams.create') }}" :active="request()->routeIs('teams.create')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                             {{ __('Create New Team') }}
                         </x-responsive-nav-link>
                     @endcan
 
                     <!-- Team Switcher -->
                     @if (Auth::user()->allTeams()->count() > 1)
-                        <div class="border-t border-[#216869]/30"></div>
+                        <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
-                        <div class="block px-4 py-2 text-xs text-[#9cc5a1]">
+                        <div class="block px-4 py-2 text-xs text-gray-500 dark:text-gray-400">
                             {{ __('Switch Teams') }}
                         </div>
 
@@ -219,3 +251,4 @@
         </div>
     </div>
 </nav>
+

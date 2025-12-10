@@ -145,7 +145,7 @@ class User extends Authenticatable
      */
     public function assignedCleanings()
     {
-        return $this->hasMany(CleaningSchedule::class, 'assigned_to');
+        return $this->hasMany(CleaningAssignment::class, 'user_id');
     }
 
     public function cleaningAssignments()
