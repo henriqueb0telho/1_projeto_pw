@@ -22,17 +22,23 @@ class CleaningSchedule extends Model
         'scheduled_date' => 'date',
     ];
 
-    // Uma limpeza pertence a um alojamento
     public function accommodation()
     {
         return $this->belongsTo(Accommodation::class);
     }
 
-    // Uma limpeza pode ter vários funcionários atribuídos
+    // Relação através da tabela cleaning_assignments
     public function users()
     {
         return $this->belongsToMany(User::class, 'cleaning_assignments')
-            ->withPivot('role_in_cleaning');
+            ->withPivot('role_in_cleaning', 'response_status', 'responded_at')
+            ->withTimestamps();
+    }
+
+    // Relação direta com cleaning_assignments
+    public function cleaningAssignments()
+    {
+        return $this->hasMany(CleaningAssignment::class);
     }
 
     // Funcionários principais nesta limpeza
@@ -45,5 +51,13 @@ class CleaningSchedule extends Model
     public function assistants()
     {
         return $this->users()->wherePivot('role_in_cleaning', 'assistant');
+    }
+
+    // Limpezas atribuídas ao usuário atual
+    public function scopeAssignedToUser($query, $userId)
+    {
+        return $query->whereHas('cleaningAssignments', function($q) use ($userId) {
+            $q->where('user_id', $userId);
+        });
     }
 }

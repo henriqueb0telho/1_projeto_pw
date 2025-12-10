@@ -23,6 +23,12 @@ class Company extends Model
         return $this->hasMany(User::class);
     }
 
+    public function accommodations()
+    {
+        return $this->hasMany(Accommodation::class);
+    }
+
+
     // Uma empresa tem muitas secções
     public function accommodationSections()
     {
