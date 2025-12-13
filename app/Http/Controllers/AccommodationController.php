@@ -13,7 +13,7 @@ class AccommodationController extends Controller
             ->where('is_active', true)
             ->paginate(12);
 
-        return view('accommodations.index', compact('accommodations'));
+        return view('admin.accommodations.index', compact('accommodations'));
     }
 
     public function show(Accommodation $accommodation)
@@ -29,6 +29,6 @@ class AccommodationController extends Controller
             }
         ]);
 
-        return view('accommodations.show', compact('accommodation'));
+        return view('admin.accommodations.show', compact('accommodation'));
     }
 }
