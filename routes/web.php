@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AccommodationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CleanerDashboardController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing');
 });
 
 Route::middleware([
@@ -39,4 +40,15 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
     Route::get('/users/export', [UserController::class, 'export'])->name('admin.users.export');
+
+    Route::get('/accommodations', [AccommodationController::class, 'index'])->name('admin.accommodations.index');
+    Route::get('/accommodations/create', [AccommodationController::class, 'create'])->name('admin.accommodations.create');
+    Route::post('/accommodations', [AccommodationController::class, 'store'])->name('admin.accommodations.store');
+    Route::get('/accommodations/{accommodation}', [AccommodationController::class, 'show'])->name('admin.accommodations.show');
+    Route::post('/accommodations/{accommodation}/force-logout', [AccommodationController::class, 'forceLogout'])->name('admin.accommodations.force-logout');
+    Route::get('/accommodations/{accommodation}/edit', [AccommodationController::class, 'edit'])->name('admin.accommodations.edit');
+    Route::put('/accommodations/{accommodation}', [AccommodationController::class, 'update'])->name('admin.accommodations.update');
+    Route::patch('/accommodations/{accommodation}/toggle-status', [AccommodationController::class, 'toggleStatus'])->name('admin.accommodations.toggle-status');
+    Route::delete('/accommodations/{accommodation}', [AccommodationController::class, 'destroy'])->name('admin.accommodations.destroy');
+    Route::get('/accommodations/export', [AccommodationController::class, 'export'])->name('admin.accommodations.export');
 });

@@ -50,25 +50,27 @@
                     </div>
 
                     <!-- Total Users -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md dark:hover:shadow-xl transition-shadow">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Utilizadores</p>
-                                <p class="text-2xl font-bold text-gray-900 dark:text-white mt-2">{{ $totalUsers }}</p>
+                    <a href="{{ route('admin.users.index') }}">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md dark:hover:shadow-xl transition-shadow">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Utilizadores</p>
+                                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-2">{{ $totalUsers }}</p>
+                                </div>
+                                <div class="p-3 bg-pine/10 dark:bg-pine/30 rounded-lg">
+                                    <svg class="w-6 h-6 text-pine dark:text-mint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="p-3 bg-pine/10 dark:bg-pine/30 rounded-lg">
-                                <svg class="w-6 h-6 text-pine dark:text-mint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                </svg>
+                            <div class="pt-3 border-t border-gray-100 dark:border-gray-700">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-600 dark:text-gray-400">Managers: <span class="font-medium text-gray-900 dark:text-white">{{ $managersCount }}</span></span>
+                                    <span class="text-gray-600 dark:text-gray-400">Cleaners: <span class="font-medium text-gray-900 dark:text-white">{{ $cleanersCount }}</span></span>
+                                </div>
                             </div>
                         </div>
-                        <div class="pt-3 border-t border-gray-100 dark:border-gray-700">
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600 dark:text-gray-400">Managers: <span class="font-medium text-gray-900 dark:text-white">{{ $managersCount }}</span></span>
-                                <span class="text-gray-600 dark:text-gray-400">Cleaners: <span class="font-medium text-gray-900 dark:text-white">{{ $cleanersCount }}</span></span>
-                            </div>
-                        </div>
-                    </div>
+                    </a>
 
                     <!-- Total Accommodations -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md dark:hover:shadow-xl transition-shadow">
