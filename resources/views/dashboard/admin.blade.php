@@ -29,7 +29,8 @@
                 <!-- KPI Cards - Light/Dark -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                     <!-- Total Companies -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md dark:hover:shadow-xl transition-shadow">
+                    <a href="{{ route('admin.companies.index') }}">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md dark:hover:shadow-xl transition-shadow">
                         <div class="flex items-center justify-between mb-4">
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Empresas</p>
@@ -48,6 +49,7 @@
                             </p>
                         </div>
                     </div>
+                    </a>
 
                     <!-- Total Users -->
                     <a href="{{ route('admin.users.index') }}">
@@ -73,24 +75,26 @@
                     </a>
 
                     <!-- Total Accommodations -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md dark:hover:shadow-xl transition-shadow">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Alojamentos</p>
-                                <p class="text-2xl font-bold text-gray-900 dark:text-white mt-2">{{ $totalAccommodations }}</p>
+                    <a href="{{ route('admin.accommodations.index') }}">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md dark:hover:shadow-xl transition-shadow">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Alojamentos</p>
+                                    <p class="text-2xl font-bold text-gray-900 dark:text-white mt-2">{{ $totalAccommodations }}</p>
+                                </div>
+                                <div class="p-3 bg-lagoon/10 dark:bg-lagoon/30 rounded-lg">
+                                    <svg class="w-6 h-6 text-lagoon dark:text-mint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="p-3 bg-lagoon/10 dark:bg-lagoon/30 rounded-lg">
-                                <svg class="w-6 h-6 text-lagoon dark:text-mint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                </svg>
+                            <div class="pt-3 border-t border-gray-100 dark:border-gray-700">
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Distribuídos por {{ $totalCompanies }} empresas
+                                </p>
                             </div>
                         </div>
-                        <div class="pt-3 border-t border-gray-100 dark:border-gray-700">
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                Distribuídos por {{ $totalCompanies }} empresas
-                            </p>
-                        </div>
-                    </div>
+                    </a>
 
                     <!-- Total Cleanings -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md dark:hover:shadow-xl transition-shadow">
@@ -268,7 +272,7 @@
                 <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
                     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                         <div class="text-sm text-gray-500 dark:text-gray-400">
-                           Sistma de Gestão de Alojamentos Locais • v{{ config('app.version', '1.0.1a') }}
+                           Sistema de Gestão de Alojamentos Locais • v{{ config('app.version', '1.dev.0.1a') }}
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="flex items-center gap-2">
