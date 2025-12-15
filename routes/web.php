@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AccommodationController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,19 @@ Route::middleware([
 });
 // Admin Users Routes
 Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
+    /* ADMIN - COMPANIES */
+    Route::get('/companies', [CompanyController::class, 'index'])->name('admin.companies.index');
+    Route::get('/companies/create', [CompanyController::class, 'create'])->name('admin.companies.create');
+    Route::post('/companies', [CompanyController::class, 'store'])->name('admin.companies.store');
+    Route::get('/companies/{company}', [CompanyController::class, 'show'])->name('admin.companies.show');
+    Route::post('/companies/{company}/force-logout', [CompanyController::class, 'forceLogout'])->name('admin.companies.force-logout');
+    Route::get('/companies/{company}/edit', [CompanyController::class, 'edit'])->name('admin.companies.edit');
+    Route::put('/companies/{company}', [CompanyController::class, 'update'])->name('admin.companies.update');
+    Route::patch('/companies/{company}/toggle-status', [CompanyController::class, 'toggleStatus'])->name('admin.companies.toggle-status');
+    Route::delete('/companies/{company}', [CompanyController::class, 'destroy'])->name('admin.companies.destroy');
+    Route::get('/companies/export', [CompanyController::class, 'export'])->name('admin.companies.export');
+
+    /* ADMIN - USERS */
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
@@ -41,6 +55,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
     Route::get('/users/export', [UserController::class, 'export'])->name('admin.users.export');
 
+    /* ADMIN - ACCOMMODATIONS */
     Route::get('/accommodations', [AccommodationController::class, 'index'])->name('admin.accommodations.index');
     Route::get('/accommodations/create', [AccommodationController::class, 'create'])->name('admin.accommodations.create');
     Route::post('/accommodations', [AccommodationController::class, 'store'])->name('admin.accommodations.store');
