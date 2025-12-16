@@ -32,7 +32,7 @@ Route::middleware([
 
 });
 // Admin Users Routes
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(function () {
     /* ADMIN - COMPANIES */
     Route::get('/companies', [CompanyController::class, 'index'])->name('admin.companies.index');
     Route::get('/companies/create', [CompanyController::class, 'create'])->name('admin.companies.create');
@@ -69,7 +69,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
 
 
 // Manager Users Routes
-Route::prefix('manager')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('manager')->middleware(['auth', 'verified', 'role:manager'])->group(function () {
     /* MANAGER - CLEANINGS */
     Route::get('/cleanings', [CleaningScheduleController::class, 'index'])->name('manager.cleanings.index');
     Route::get('/cleanings/create', [CleaningScheduleController::class, 'create'])->name('manager.cleanings.create');
@@ -82,7 +82,7 @@ Route::prefix('manager')->middleware(['auth', 'verified'])->group(function () {
 });
 
 
-Route::prefix('cleaner')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('cleaner')->middleware(['auth', 'verified', 'role:cleaner'])->group(function () {
     Route::get('/agenda', [CleanerController::class, 'dashboard'])->name('cleaner.dashboard');
     Route::post('/respond/{assignment}', [CleanerController::class, 'respond'])->name('cleaner.respond');
     Route::post('/reschedule/{assignment}', [CleanerController::class, 'requestReschedule'])->name('cleaner.reschedule');
