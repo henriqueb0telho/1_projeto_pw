@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Models\Accommodation;
+use App\Models\CleaningAssignmentReschedule;
 use App\Models\CleaningSchedule;
 use App\Models\CleaningAssignment;
 use App\Models\User;
@@ -159,6 +160,44 @@ class CleaningScheduleController extends Controller
         $schedule->load(['primaryCleaners', 'assistants']);
 
         return view('manager.cleanings.edit', compact('schedule', 'cleaners'));
+    }
+
+    public function handleReschedule(Request $request, CleaningAssignmentReschedule $reschedule)
+    {
+        $action = $request->input('action'); // 'approve' ou 'reject'
+        $managerNote = $request->input('manager_response');
+
+        DB::transaction(function () use ($reschedule, $action, $managerNote) {
+            if ($action === 'approve') {
+                // Atualizar o pedido para 'approved'
+                $reschedule->update([
+                    'status' => 'approved',
+                    'manager_response_note' => $managerNote
+                ]);
+
+                // Atualizar o Agendamento Principal com a nova data/hora
+                $assignment = $reschedule->cleaningAssignment; // Relação no modelo Reschedule
+                $schedule = $assignment->cleaningSchedule;
+
+                $schedule->update([
+                    'scheduled_date' => $reschedule->requested_date,
+                    'scheduled_time' => $reschedule->requested_time,
+                    'status' => 'scheduled' // Garante que volta a 'scheduled' se tiver mudado
+                ]);
+
+                // Opcional: Resetar o status de aceitação de todos para eles confirmarem a nova hora?
+                $schedule->cleaningAssignments()->update(['response_status' => 'pending']);
+
+            } else {
+                // Rejeitar
+                $reschedule->update([
+                    'status' => 'rejected',
+                    'manager_response_note' => $managerNote
+                ]);
+            }
+        });
+
+        return back()->with('success', 'Pedido de alteração processado com sucesso.');
     }
 
     /**

@@ -19,4 +19,9 @@ class CleaningAssignmentReschedule extends Model
         'status',
         'manager_response_note'
     ];
+
+    public function cleaningAssignment()
+    {
+        return $this->belongsTo(CleaningAssignment::class, 'cleaning_assignment_id');
+    }
 }

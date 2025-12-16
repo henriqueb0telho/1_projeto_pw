@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AccommodationController;
 use App\Http\Controllers\Manager\CleaningScheduleController;
+use App\Http\Controllers\Cleaner\CleanerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CleanerDashboardController;
@@ -73,8 +74,17 @@ Route::prefix('manager')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/cleanings', [CleaningScheduleController::class, 'index'])->name('manager.cleanings.index');
     Route::get('/cleanings/create', [CleaningScheduleController::class, 'create'])->name('manager.cleanings.create');
     Route::post('/cleanings', [CleaningScheduleController::class, 'store'])->name('manager.cleanings.store');
+    Route::post('/schedules/reschedule/{reschedule}', [CleaningScheduleController::class, 'handleReschedule'])->name('manager.cleanings.handle-reschedule');
     Route::get('/cleanings/{schedule}', [CleaningScheduleController::class, 'show'])->name('manager.cleanings.show');
     Route::get('/cleanings/{schedule}/edit', [CleaningScheduleController::class, 'edit'])->name('manager.cleanings.edit');
     Route::put('/cleanings/{schedule}', [CleaningScheduleController::class, 'update'])->name('manager.cleanings.update');
     Route::delete('/cleanings/{schedule}', [CleaningScheduleController::class, 'destroy'])->name('manager.cleanings.destroy');
+});
+
+
+Route::prefix('cleaner')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/agenda', [CleanerController::class, 'dashboard'])->name('cleaner.dashboard');
+    Route::post('/respond/{assignment}', [CleanerController::class, 'respond'])->name('cleaner.respond');
+    Route::post('/reschedule/{assignment}', [CleanerController::class, 'requestReschedule'])->name('cleaner.reschedule');
+    Route::post('/update-status/{assignment}', [CleanerController::class, 'updateStatus'])->name('cleaner.update_status');
 });
