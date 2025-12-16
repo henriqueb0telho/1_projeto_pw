@@ -2,7 +2,6 @@
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-150">
         <div class="py-8">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Header -->
                 <div class="mb-8">
                     <div class="flex items-center justify-between mb-6">
                         <div class="flex items-center gap-4">
@@ -18,7 +17,6 @@
                             </div>
                         </div>
 
-                        <!-- User Status Badge -->
                         <div class="flex items-center gap-3">
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
                                 {{ $user->status === 'active' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' :
@@ -34,7 +32,6 @@
                         </div>
                     </div>
 
-                    <!-- User Info Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm mb-6">
                         <div class="flex items-center gap-4">
                             <div class="flex-shrink-0">
@@ -82,20 +79,20 @@
                     </div>
                 </div>
 
-                <!-- Edit Form -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
-                    <!-- Form Header -->
                     <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Informações do Utilizador</h3>
                         <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Atualize os dados abaixo e guarde as alterações</p>
                     </div>
 
-                    <!-- Form Content -->
-                    <form action="{{ route('admin.users.update', $user) }}" method="POST" class="p-6 space-y-6">
+                    {{--
+                        IMPORTANTE: Adicionei o ID 'update-form' aqui.
+                        Este formulário contém apenas os campos e é fechado ANTES dos botões.
+                    --}}
+                    <form id="update-form" action="{{ route('admin.users.update', $user) }}" method="POST" class="p-6 space-y-6">
                         @csrf
                         @method('PUT')
 
-                        <!-- Success/Error Messages -->
                         @if(session('success'))
                             <div class="p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg">
                                 <div class="flex items-center">
@@ -123,71 +120,33 @@
                             </div>
                         @endif
 
-                        <!-- Basic Information -->
                         <div class="space-y-4">
                             <h4 class="text-md font-semibold text-gray-900 dark:text-white border-b pb-2">Informações Básicas</h4>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- First Name -->
                                 <div>
-                                    <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Primeiro Nome *
-                                    </label>
-                                    <input type="text"
-                                           id="first_name"
-                                           name="first_name"
-                                           value="{{ old('first_name', $user->first_name) }}"
-                                           required
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
+                                    <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Primeiro Nome *</label>
+                                    <input type="text" id="first_name" name="first_name" value="{{ old('first_name', $user->first_name) }}" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
                                 </div>
 
-                                <!-- Last Name -->
                                 <div>
-                                    <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Último Nome *
-                                    </label>
-                                    <input type="text"
-                                           id="last_name"
-                                           name="last_name"
-                                           value="{{ old('last_name', $user->last_name) }}"
-                                           required
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
+                                    <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Último Nome *</label>
+                                    <input type="text" id="last_name" name="last_name" value="{{ old('last_name', $user->last_name) }}" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
                                 </div>
 
-                                <!-- Email -->
                                 <div class="md:col-span-2">
-                                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Email *
-                                    </label>
-                                    <input type="email"
-                                           id="email"
-                                           name="email"
-                                           value="{{ old('email', $user->email) }}"
-                                           required
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
+                                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email *</label>
+                                    <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
                                 </div>
 
-                                <!-- Phone -->
                                 <div>
-                                    <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Telefone
-                                    </label>
-                                    <input type="text"
-                                           id="phone"
-                                           name="phone"
-                                           value="{{ old('phone', $user->phone) }}"
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
+                                    <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Telefone</label>
+                                    <input type="text" id="phone" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
                                 </div>
 
-                                <!-- Role -->
                                 <div>
-                                    <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Cargo *
-                                    </label>
-                                    <select id="role"
-                                            name="role"
-                                            required
-                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
+                                    <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cargo *</label>
+                                    <select id="role" name="role" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
                                         <option value="">Selecione o cargo</option>
                                         <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Administrador</option>
                                         <option value="manager" {{ old('role', $user->role) == 'manager' ? 'selected' : '' }}>Gestor</option>
@@ -197,33 +156,25 @@
                             </div>
                         </div>
 
-                        <!-- Additional Information -->
                         <div class="space-y-4 pt-6">
                             <h4 class="text-md font-semibold text-gray-900 dark:text-white border-b pb-2">Informações Adicionais</h4>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- Status -->
+                                {{--
+                                    NOTA: Este campo 'status' é para a atualização manual via dropdown.
+                                    O botão de Toggle é um formulário separado lá em baixo.
+                                --}}
                                 <div>
-                                    <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Estado *
-                                    </label>
-                                    <select id="status"
-                                            name="status"
-                                            required
-                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
+                                    <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estado *</label>
+                                    <select id="status" name="status" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
                                         <option value="active" {{ old('status', $user->status) == 'active' ? 'selected' : '' }}>Ativo</option>
                                         <option value="inactive" {{ old('status', $user->status) == 'inactive' ? 'selected' : '' }}>Inativo</option>
                                     </select>
                                 </div>
 
-                                <!-- Company -->
                                 <div>
-                                    <label for="company_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Empresa
-                                    </label>
-                                    <select id="company_id"
-                                            name="company_id"
-                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
+                                    <label for="company_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Empresa</label>
+                                    <select id="company_id" name="company_id" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
                                         <option value="">Sem empresa</option>
                                         @foreach($companies as $company)
                                             <option value="{{ $company->id }}" {{ old('company_id', $user->company_id) == $company->id ? 'selected' : '' }}>
@@ -232,105 +183,80 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
 
-                            <!-- Address -->
-                            <div>
-                                <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    Endereço
-                                </label>
-                                <textarea id="address"
-                                          name="address"
-                                          rows="3"
-                                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">{{ old('address', $user->address) }}</textarea>
+                                <div class="md:col-span-2">
+                                    <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Endereço</label>
+                                    <textarea id="address" name="address" rows="3" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">{{ old('address', $user->address) }}</textarea>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Password Section -->
                         <div class="space-y-4 pt-6">
                             <h4 class="text-md font-semibold text-gray-900 dark:text-white border-b pb-2">Alterar Password</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                Deixe em branco se não quiser alterar a password
-                            </p>
-
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- New Password -->
                                 <div>
-                                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Nova Password
-                                    </label>
-                                    <input type="password"
-                                           id="password"
-                                           name="password"
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
+                                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nova Password</label>
+                                    <input type="password" id="password" name="password" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
                                 </div>
-
-                                <!-- Confirm Password -->
                                 <div>
-                                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Confirmar Nova Password
-                                    </label>
-                                    <input type="password"
-                                           id="password_confirmation"
-                                           name="password_confirmation"
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
+                                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confirmar Nova Password</label>
+                                    <input type="password" id="password_confirmation" name="password_confirmation" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-mint focus:border-mint bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-150">
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Form Actions -->
-                        <div class="flex flex-col sm:flex-row justify-between gap-4 pt-8 border-t border-gray-100 dark:border-gray-700">
-                            <div class="flex gap-3">
-                                <!-- View Profile -->
-                                <a href="{{ route('admin.users.show', $user) }}"
-                                   class="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 flex items-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                    </svg>
-                                    Ver Perfil
-                                </a>
-
-                                <!-- Toggle Status -->
-                                <form action="{{ route('admin.users.toggle-status', $user) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit"
-                                            class="px-4 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            @if($user->status === 'active')
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
-                                            @else
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                            @endif
-                                        </svg>
-                                        {{ $user->status === 'active' ? 'Desativar' : 'Ativar' }}
-                                    </button>
-                                </form>
-                            </div>
-
-                            <div class="flex gap-3">
-                                <!-- Cancel -->
-                                <a href="{{ route('admin.users.index') }}"
-                                   class="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
-                                    Cancelar
-                                </a>
-
-                                <!-- Save Changes -->
-                                <button type="submit"
-                                        class="px-4 py-2.5 bg-mint hover:bg-lagoon text-white rounded-lg font-bold shadow-sm hover:shadow transition-all duration-200 flex items-center gap-2 group">
-                                    <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
-                                    </svg>
-                                    Guardar Alterações
-                                </button>
                             </div>
                         </div>
                     </form>
+                    {{-- AQUI FECHA O FORMULÁRIO PRINCIPAL --}}
+
+                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row justify-between gap-4">
+                        <div class="flex gap-3">
+                            <a href="{{ route('admin.users.show', $user) }}" class="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                Ver Perfil
+                            </a>
+
+                            {{--
+                                FORMULÁRIO DE TOGGLE (Separado)
+                                Como fechámos o form principal acima, este agora funciona isoladamente.
+                            --}}
+                            <form action="{{ route('admin.users.toggle-status', $user) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="px-4 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        @if($user->status === 'active')
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                        @else
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        @endif
+                                    </svg>
+                                    {{ $user->status === 'active' ? 'Desativar' : 'Ativar' }}
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <a href="{{ route('admin.users.index') }}" class="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
+                                Cancelar
+                            </a>
+
+                            {{--
+                                BOTÃO DE GUARDAR
+                                O atributo 'form="update-form"' liga este botão ao formulário principal lá em cima
+                            --}}
+                            <button type="submit" form="update-form" class="px-4 py-2.5 bg-mint hover:bg-lagoon text-white rounded-lg font-bold shadow-sm hover:shadow transition-all duration-200 flex items-center gap-2 group">
+                                <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                                </svg>
+                                Guardar Alterações
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Danger Zone -->
                 @if($user->id !== auth()->id())
                     <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl border border-red-200 dark:border-red-800 overflow-hidden">
                         <div class="px-6 py-4 border-b border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/30">
@@ -353,8 +279,7 @@
                                       class="flex-shrink-0">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"
-                                            class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2">
+                                    <button type="submit" class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                         </svg>
