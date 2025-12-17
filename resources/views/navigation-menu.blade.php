@@ -1,25 +1,56 @@
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-    <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
-                <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <x-application-logo class="block h-9 w-auto text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-4 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    {{-- Link Geral (Dashboard) - Redireciona consoante a role --}}
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="text-gray-700 dark:text-gray-300 hover:text-mint dark:hover:text-mint border-mint">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @php
+                        $user = Auth::user();
+                    @endphp
+
+                    {{-- MENUS DE ADMINISTRADOR --}}
+                    @if($user->role === 'admin')
+                        <x-nav-link href="{{ route('admin.companies.index') }}" :active="request()->routeIs('admin.companies.*')" class="text-gray-700 dark:text-gray-300 hover:text-mint dark:hover:text-mint">
+                            {{ __('Empresas') }}
+                        </x-nav-link>
+
+                        <x-nav-link href="{{ route('admin.accommodations.index') }}" :active="request()->routeIs('admin.accommodations.*')" class="text-gray-700 dark:text-gray-300 hover:text-mint dark:hover:text-mint">
+                            {{ __('Alojamentos') }}
+                        </x-nav-link>
+
+                        <x-nav-link href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')" class="text-gray-700 dark:text-gray-300 hover:text-mint dark:hover:text-mint">
+                            {{ __('Utilizadores') }}
+                        </x-nav-link>
+                    @endif
+
+                    {{-- MENUS DE GESTOR (Admin também vê) --}}
+                    @if($user->role === 'admin' || $user->role === 'manager')
+                        <x-nav-link href="{{ route('manager.cleanings.index') }}" :active="request()->routeIs('manager.cleanings.*')" class="text-gray-700 dark:text-gray-300 hover:text-mint dark:hover:text-mint">
+                            {{ __('Limpezas') }}
+                        </x-nav-link>
+                    @endif
+
+                    {{-- MENUS DE CLEANER --}}
+                    {{-- Normalmente o Cleaner só tem o Dashboard, mas se tiver mais links específicos, adicione aqui --}}
+                    @if($user->role === 'admin' || $user->role === 'cleaner')
+                        <x-nav-link href="{{ route('cleaner.dashboard') }}" :active="request()->routeIs('cleaner.*')" class="text-gray-700 dark:text-gray-300 hover:text-mint dark:hover:text-mint">
+                            {{ __('Agenda') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <!-- Dark Mode Toggle Button -->
                 <button
                     id="theme-toggle"
                     onclick="toggleTheme()"
@@ -27,17 +58,14 @@
                     class="p-2 me-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-mint transition-colors duration-200"
                     aria-label="Alternar tema claro/escuro"
                 >
-                    <!-- Sun icon (Light mode - visible in dark mode) -->
                     <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
                     </svg>
-                    <!-- Moon icon (Dark mode - visible in light mode) -->
                     <svg id="theme-toggle-dark-icon" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                     </svg>
                 </button>
 
-                <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                     <div class="ms-3 relative">
                         <x-dropdown align="right" width="60">
@@ -55,12 +83,10 @@
 
                             <x-slot name="content">
                                 <div class="w-60 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                                    <!-- Team Management -->
                                     <div class="block px-4 py-2 text-xs text-gray-500 dark:text-gray-400">
                                         {{ __('Manage Team') }}
                                     </div>
 
-                                    <!-- Team Settings -->
                                     <x-dropdown-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                                         {{ __('Team Settings') }}
                                     </x-dropdown-link>
@@ -71,7 +97,6 @@
                                         </x-dropdown-link>
                                     @endcan
 
-                                    <!-- Team Switcher -->
                                     @if (Auth::user()->allTeams()->count() > 1)
                                         <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
@@ -89,7 +114,6 @@
                     </div>
                 @endif
 
-                <!-- Settings Dropdown -->
                 <div class="ms-3 relative">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
@@ -112,7 +136,6 @@
 
                         <x-slot name="content">
                             <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                                <!-- Account Management -->
                                 <div class="block px-4 py-2 text-xs text-gray-500 dark:text-gray-400">
                                     {{ __('Manage Account') }}
                                 </div>
@@ -129,7 +152,6 @@
 
                                 <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
-                                <!-- Authentication -->
                                 <form method="POST" action="{{ route('logout') }}" x-data>
                                     @csrf
 
@@ -144,7 +166,6 @@
                 </div>
             </div>
 
-            <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
                     <svg class="size-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -156,15 +177,37 @@
         </div>
     </div>
 
-    <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white dark:bg-gray-800">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @php
+                $user = Auth::user();
+            @endphp
+
+            {{-- MENU MOBILE - ADMIN --}}
+            @if($user->role === 'admin')
+                <x-responsive-nav-link href="{{ route('admin.companies.index') }}" :active="request()->routeIs('admin.companies.*')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    {{ __('Empresas') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('admin.accommodations.index') }}" :active="request()->routeIs('admin.accommodations.*')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    {{ __('Alojamentos') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    {{ __('Utilizadores') }}
+                </x-responsive-nav-link>
+            @endif
+
+            {{-- MENU MOBILE - GESTOR (Admin também vê) --}}
+            @if($user->role === 'admin' || $user->role === 'manager')
+                <x-responsive-nav-link href="{{ route('manager.cleanings.index') }}" :active="request()->routeIs('manager.cleanings.*')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    {{ __('Limpezas') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
-        <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-700">
             <div class="flex items-center px-4">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
@@ -180,7 +223,6 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <!-- Dark Mode Toggle Mobile -->
                 <button
                     onclick="toggleTheme()"
                     type="button"
@@ -194,7 +236,6 @@
                     </div>
                 </button>
 
-                <!-- Account Management -->
                 <x-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
@@ -205,7 +246,6 @@
                     </x-responsive-nav-link>
                 @endif
 
-                <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
 
@@ -215,7 +255,6 @@
                     </x-responsive-nav-link>
                 </form>
 
-                <!-- Team Management -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                     <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
@@ -223,7 +262,6 @@
                         {{ __('Manage Team') }}
                     </div>
 
-                    <!-- Team Settings -->
                     <x-responsive-nav-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}" :active="request()->routeIs('teams.show')" class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                         {{ __('Team Settings') }}
                     </x-responsive-nav-link>
@@ -234,7 +272,6 @@
                         </x-responsive-nav-link>
                     @endcan
 
-                    <!-- Team Switcher -->
                     @if (Auth::user()->allTeams()->count() > 1)
                         <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
@@ -251,4 +288,3 @@
         </div>
     </div>
 </nav>
-
