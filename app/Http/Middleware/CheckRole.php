@@ -15,38 +15,17 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        // Verifica se o usuário está autenticado
-        if (!$request->user()) {
-            // Se for API, retorna JSON 401
-            if ($request->expectsJson() || $request->is('api/*')) {
-                return response()->json([
-                    'message' => 'Unauthenticated.',
-                    'error' => 'authentication_required'
-                ], 401);
-            }
-
-            // Se for web, redireciona para login
+        if (! $request->user()) {
             return redirect('/login');
         }
 
-        // Se for Admin, tem acesso total (Superuser)
+        // Se for Admin, tem acesso a tudo (Superuser)
         if ($request->user()->role === 'admin') {
             return $next($request);
         }
 
-        // Verifica se a role do utilizador corresponde à exigida
+        // Verifica se a role do utilizador corresponde à role exigida pela rota
         if ($request->user()->role !== $role) {
-            // Se for API, retorna JSON 403
-            if ($request->expectsJson() || $request->is('api/*')) {
-                return response()->json([
-                    'message' => 'ACESSO NÃO AUTORIZADO: Não tem permissão para aceder a esta área.',
-                    'error' => 'forbidden',
-                    'required_role' => $role,
-                    'user_role' => $request->user()->role
-                ], 403);
-            }
-
-            // Se for web, aborta com 403
             abort(403, 'ACESSO NÃO AUTORIZADO: Não tem permissão para aceder a esta área.');
         }
 
